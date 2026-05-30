@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>TutorCall</title>
+
+  <style>
+    body {
+      background: black;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+      color: white;
+    }
+
+    .phone {
+      width: 320px;
+      height: 600px;
+      background: #000;
+      border-radius: 40px;
+      padding: 20px;
+      box-shadow: 0 0 40px rgba(255,255,255,0.1);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .screen {
+      text-align: center;
+    }
+
+    .title {
+      font-size: 18px;
+      color: gray;
+    }
+
+    .output {
+      margin-top: 20px;
+      font-size: 20px;
+      min-height: 80px;
+    }
+
+    .dialpad {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 15px;
+      margin-top: 20px;
+    }
+
+    .btn {
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      border: none;
+      font-size: 22px;
+      background: #1c1c1e;
+      color: white;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .btn:active {
+      transform: scale(0.9);
+      background: #333;
+    }
+
+    .call-btns {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 20px;
+    }
+
+    .call {
+      background: #34c759;
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+    }
+
+    .end {
+      background: #ff3b30;
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+    }
+  </style>
+
+</head>
+
+<body>
+
+<div class="phone">
+
+  <div class="screen">
+    <div class="title">TutorCall</div>
+    <div id="output" class="output">Tap call to begin</div>
+  </div>
+
+  <!-- DIALPAD -->
+  <div class="dialpad">
+    <button class="btn" onclick="press('1')">1</button>
+    <button class="btn" onclick="press('2')">2</button>
+    <button class="btn" onclick="press('3')">3</button>
+    <button class="btn" onclick="press('4')">4</button>
+    <button class="btn" onclick="press('5')">5</button>
+    <button class="btn" onclick="press('6')">6</button>
+    <button class="btn" onclick="press('7')">7</button>
+    <button class="btn" onclick="press('8')">8</button>
+    <button class="btn" onclick="press('9')">9</button>
+    <button class="btn" onclick="press('*')">*</button>
+    <button class="btn" onclick="press('0')">0</button>
+    <button class="btn" onclick="press('#')">#</button>
+  </div>
+
+  <!-- CALL BUTTONS -->
+  <div class="call-btns">
+    <button class="call" onclick="start()">📞</button>
+    <button class="end" onclick="endCall()">❌</button>
+  </div>
+
+</div>
+
+<script>
+
+const clickSound = new Audio("https://www.soundjay.com/button/sounds/button-16.mp3");
+
+// SPEAK
+function speak(text) {
+  window.speechSynthesis.cancel();
+  const speech = new SpeechSynthesisUtterance(text);
+  speech.rate = 0.9;
+  window.speechSynthesis.speak(speech);
+}
+
+// UPDATE
+function updateOutput(text) {
+  document.getElementById("output").innerText = text;
+  speak(text);
+}
+
+// START CALL
+async function start() {
+  let res = await fetch('/start', {method: 'POST'});
+  let data = await res.json();
+  updateOutput(data.text);
+}
+
+// PRESS BUTTON
+async function press(digit) {
+  clickSound.currentTime = 0;
+  clickSound.play();
+
+  let res = await fetch('/input', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({digit: digit})
+  });
+
+  let data = await res.json();
+  updateOutput(data.text);
+}
+
+// END CALL
+function endCall() {
+  updateOutput("Call ended.");
+}
+
+</script>
+
+</body>
+</html>
