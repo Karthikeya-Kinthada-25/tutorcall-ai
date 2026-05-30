@@ -1,20 +1,37 @@
 # TutorCall AI
 
-An AI-based tutoring system that simulates learning through voice interaction.
+A call-style tutoring system that delivers structured learning through step-by-step interaction.
 
 ## Features
-- Call-style interface
-- Step-by-step explanation
-- Voice-based interaction
-- AI-generated teaching flow
 
-## Use Case
-Designed to make learning accessible without traditional UI complexity.
+- Simulated call interface
+- Step-based lesson progression
+- Simple user interaction model
+- Backend-driven learning flow
+
+## How it works
+
+- User starts the call
+- Presses "1" to proceed
+- System delivers next part of lesson
+- Continues until completion
 
 ## Tech Stack
+
 - Python
-- Speech AI
-- LLM
+- Flask
+
+## Run the project
+
+1. Install dependencies:
+pip install -r requirements.txt
+
+2. Run:
+python app.py
+
+3. Open:
+http://localhost:5000
 
 ## Author
+
 Karthikeya Kinthada
